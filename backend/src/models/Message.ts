@@ -31,6 +31,6 @@ const messageSchema = new Schema<IMessage>(
   },
 );
 
-messageSchema.index({ chat: 1, createdAt: 1 }, { unique: true });
+messageSchema.index({ chat: 1, createdAt: 1 });
 
 export const Message = mongoose.model<IMessage>("Message", messageSchema);
