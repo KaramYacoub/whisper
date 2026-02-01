@@ -5,18 +5,14 @@ import { Message } from "../models/Message";
 import { Chat } from "../models/Chat";
 import { User } from "../models/User";
 
-interface SocketWithUserId extends Socket {
-  userId: string;
-}
-
 export const onlineUsers: Map<string, string> = new Map();
 
 export const initializeSocket = (httpServer: HttpServer) => {
   const allowedOrigins = [
     "http://localhost:8001", // expo
     "http://localhost:5173", // vite
-    process.env.FRONTEND_URL as string, // prod
-  ];
+    process.env.FRONTEND_URL, // prod
+  ].filter(Boolean) as string[];
 
   const io = new SocketServer(httpServer, { cors: { origin: allowedOrigins } });
 
@@ -39,7 +35,7 @@ export const initializeSocket = (httpServer: HttpServer) => {
         return next(new Error("Unauthorized"));
       }
 
-      (socket as SocketWithUserId).userId = user._id.toString();
+      socket.data.userId = user._id.toString();
 
       next();
     } catch (error) {
@@ -48,7 +44,7 @@ export const initializeSocket = (httpServer: HttpServer) => {
   });
 
   io.on("connection", (socket) => {
-    const userId = (socket as SocketWithUserId).userId;
+    const userId = socket.data.userId;
 
     socket.emit("online-users", { userIds: Array.from(onlineUsers.keys()) });
 
@@ -91,7 +87,7 @@ export const initializeSocket = (httpServer: HttpServer) => {
           chat.lastMessageAt = new Date();
           await chat.save();
 
-          await message.populate("sender", "name email avatar");
+          await message.populate("sender", "name avatar");
 
           io.to(`chat:${chatId}`).emit("new-message", message);
 
