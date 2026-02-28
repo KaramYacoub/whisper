@@ -1,4 +1,5 @@
 import express from "express";
+import morgan from "morgan";
 import { clerkMiddleware } from "@clerk/express";
 
 import authRoutes from "./routes/authRoutes";
@@ -10,6 +11,10 @@ import { errorHandler } from "./middleware/errorHandle";
 const app = express();
 
 app.use(express.json());
+
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 app.use(clerkMiddleware());
 

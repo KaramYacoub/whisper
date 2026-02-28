@@ -3,7 +3,7 @@ import {
   Text,
   Dimensions,
   Pressable,
-  ActivityIndicatorBase,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Image } from "expo-image";
@@ -64,7 +64,7 @@ const AuthScreen = () => {
                 onPress={() => !isLoading && handleSocialAuth("oauth_google")}
               >
                 {loadingStrategy === "oauth_google" ? (
-                  <ActivityIndicatorBase size="small" color="#1a1a1a" />
+                  <ActivityIndicator size="small" color="#1a1a1a" />
                 ) : (
                   <>
                     <Image
@@ -89,7 +89,7 @@ const AuthScreen = () => {
                 onPress={() => !isLoading && handleSocialAuth("oauth_apple")}
               >
                 {loadingStrategy === "oauth_apple" ? (
-                  <ActivityIndicatorBase size="small" color="#FFFFFF" />
+                  <ActivityIndicator size="small" color="#FFFFFF" />
                 ) : (
                   <>
                     <Ionicons name="logo-apple" size={20} color="#FFFFFF" />
