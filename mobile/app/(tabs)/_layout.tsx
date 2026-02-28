@@ -6,7 +6,7 @@ const TabsLayout = () => {
   const { isSignedIn, isLoaded } = useAuth();
 
   if (!isLoaded) return null;
-  if (!isSignedIn) return <Redirect href="/(auth)" />;
+  if (!isSignedIn) return <Redirect href={"/(auth)"} />;
 
   return (
     <Tabs
@@ -27,12 +27,12 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Chat",
+          title: "Chats",
           tabBarIcon: ({ color, focused, size }) => (
             <Ionicons
               name={focused ? "chatbubbles" : "chatbubbles-outline"}
-              color={color}
               size={size}
+              color={color}
             />
           ),
         }}
@@ -44,8 +44,8 @@ const TabsLayout = () => {
           tabBarIcon: ({ color, focused, size }) => (
             <Ionicons
               name={focused ? "person" : "person-outline"}
-              color={color}
               size={size}
+              color={color}
             />
           ),
         }}
@@ -53,4 +53,5 @@ const TabsLayout = () => {
     </Tabs>
   );
 };
+
 export default TabsLayout;

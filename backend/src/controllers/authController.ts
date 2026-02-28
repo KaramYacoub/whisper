@@ -28,23 +28,29 @@ export async function authCallback(
 ) {
   try {
     const { userId: clerkId } = getAuth(req);
+
     if (!clerkId) {
-      return res.status(401).json({ message: "Unauthorized - invalid token" });
+      res.status(401).json({ message: "Unauthorized" });
+      return;
     }
+
     let user = await User.findOne({ clerkId });
+
     if (!user) {
-      // get user info from clerk
+      // get user info from clerk and save to db
       const clerkUser = await clerkClient.users.getUser(clerkId);
+
       user = await User.create({
         clerkId,
         name: clerkUser.firstName
           ? `${clerkUser.firstName} ${clerkUser.lastName || ""}`.trim()
-          : clerkUser.emailAddresses[0]?.emailAddress.split("@")[0],
+          : clerkUser.emailAddresses[0]?.emailAddress?.split("@")[0],
         email: clerkUser.emailAddresses[0]?.emailAddress,
         avatar: clerkUser.imageUrl,
       });
     }
-    return res.status(200).json(user);
+
+    res.json(user);
   } catch (error) {
     res.status(500);
     next(error);
